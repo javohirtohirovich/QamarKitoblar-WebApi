@@ -11,4 +11,20 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Filters\" />
+    <Folder Include="Middlewares\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\avatars\" />
+    <Folder Include="wwwroot\documents\" />
+    <Folder Include="wwwroot\audios\" />
+    <Folder Include="wwwroot\videos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\QamarKitoblar.Service\QamarKitoblar.Service.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FCF0A634-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "recourse", "recourse", "{D4691928-6756-4FE7-8078-4431720971A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QamarKitoblar.WebApi", "src\QamarKitoblar.WebApi\QamarKitoblar.WebApi.csproj", "{F5BAB57D-2377-4ADA-AE69-F6338488EFBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QamarKitoblar.WebApi", "src\QamarKitoblar.WebApi\QamarKitoblar.WebApi.csproj", "{F5BAB57D-2377-4ADA-AE69-F6338488EFBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QamarKitoblar.Domain", "src\QamarKitoblar.Domain\QamarKitoblar.Domain.csproj", "{2B2D8A03-B950-4C68-A8BC-0CF9A6832E9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QamarKitoblar.Domain", "src\QamarKitoblar.Domain\QamarKitoblar.Domain.csproj", "{2B2D8A03-B950-4C68-A8BC-0CF9A6832E9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QamarKitoblar.DataAccess", "src\QamarKitoblar.DataAccess\QamarKitoblar.DataAccess.csproj", "{BE6500D6-5287-44BD-B1F0-70B83F65F9EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QamarKitoblar.DataAccess", "src\QamarKitoblar.DataAccess\QamarKitoblar.DataAccess.csproj", "{BE6500D6-5287-44BD-B1F0-70B83F65F9EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QamarKitoblar.Service", "QamarKitoblar.Service\QamarKitoblar.Service.csproj", "{CE0B9E6F-5364-4EF7-9368-EECA206929F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QamarKitoblar.Service", "QamarKitoblar.Service\QamarKitoblar.Service.csproj", "{CE0B9E6F-5364-4EF7-9368-EECA206929F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QamarKitoblar.UnitTest", "test\QamarKitoblar.UnitTest\QamarKitoblar.UnitTest.csproj", "{67432591-D09E-4A72-B72E-6722A1CFD1A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QamarKitoblar.UnitTest", "test\QamarKitoblar.UnitTest\QamarKitoblar.UnitTest.csproj", "{67432591-D09E-4A72-B72E-6722A1CFD1A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

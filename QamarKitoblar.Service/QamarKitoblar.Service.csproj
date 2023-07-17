@@ -6,4 +6,19 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Attributes\" />
+    <Folder Include="Common\Helpers\" />
+    <Folder Include="Common\Exceptions\" />
+    <Folder Include="Common\Validations\" />
+    <Folder Include="Common\Security\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Interafaces\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\QamarKitoblar.DataAccess\QamarKitoblar.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
