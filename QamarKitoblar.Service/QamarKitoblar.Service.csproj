@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,17 +8,20 @@
 
   <ItemGroup>
     <Folder Include="Common\Attributes\" />
-    <Folder Include="Common\Helpers\" />
     <Folder Include="Common\Exceptions\" />
     <Folder Include="Common\Validations\" />
     <Folder Include="Common\Security\" />
-    <Folder Include="Dtos\" />
-    <Folder Include="Interafaces\" />
-    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\QamarKitoblar.DataAccess\QamarKitoblar.DataAccess.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
