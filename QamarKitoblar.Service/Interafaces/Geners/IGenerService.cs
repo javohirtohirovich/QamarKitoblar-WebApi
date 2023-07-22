@@ -1,9 +1,6 @@
-﻿using QamarKitoblar.Service.Dtos.Categories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using QamarKitoblar.DataAccess.Utils;
+using QamarKitoblar.Domain.Entities.Geners;
+using QamarKitoblar.Service.Dtos.Categories;
 
 namespace QamarKitoblar.Service.Interafaces.Geners
 {
@@ -12,5 +9,9 @@ namespace QamarKitoblar.Service.Interafaces.Geners
         public Task<bool> CreateAsync(GenerCreateDto dto);
         public Task<bool> DeleteAsync(long GenerId);
         public Task<long> CountAsync();
+        public Task<bool> UpdateAsync(long GenerId, GenerUpdateDto dto);
+        public Task<Gener> GetByIdAsync(long GenerId);
+        public Task<IList<Gener>> GetAllAsync(PaginationParams @params);
+
     }
 }

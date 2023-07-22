@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Interafaces.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 
@@ -26,9 +22,21 @@ public class FileService : IFileService
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteImageAsync(string subpath)
+    public async Task<bool> DeleteImageAsync(string subpath)
     {
-        throw new NotImplementedException();
+        string path=Path.Combine(ROOTPATH, subpath);
+        if(File.Exists(path)) 
+        {
+            await Task.Run(() => 
+            { 
+                File.Delete(path); 
+            });
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public Task<string> UploadAvatarAsync(IFormFile avatar)
@@ -36,8 +44,15 @@ public class FileService : IFileService
         throw new NotImplementedException();
     }
 
-    public Task<string> UploadImageAsync(IFormFile image)
+    public async Task<string> UploadImageAsync(IFormFile image)
     {
-        throw new NotImplementedException();
+        string newImageName = MediaHelper.MakeImageName(image.FileName);
+        string subpath = Path.Combine(MEDIA, IMAGE, newImageName);
+        string path=Path.Combine(ROOTPATH, subpath);
+
+        var stream = new FileStream(path, FileMode.Create);
+        await image.CopyToAsync(stream);
+        stream.Close();
+        return subpath;
     }
 }

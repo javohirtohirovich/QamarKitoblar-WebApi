@@ -1,17 +1,12 @@
 ﻿using QamarKitoblar.Domain.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Domain.Entities.Users
 {
-    public sealed class User:Auditable
+    public sealed class User : Auditable
     {
         [MaxLength(50)]
-        public string FirstName { get; set; }=String.Empty;
+        public string FirstName { get; set; } = String.Empty;
         [MaxLength(50)]
         public string LastName { get; set; } = String.Empty;
         [MaxLength(13)]
@@ -25,11 +20,11 @@ namespace QamarKitoblar.Domain.Entities.Users
         public string Region { get; set; } = String.Empty;
         [MaxLength(7)]
         public string PostalNumber { get; set; } = String.Empty;
-        public string PasswordHash {get; set;}=String.Empty;
+        public string PasswordHash { get; set; } = String.Empty;
         public string Salt { get; set; } = String.Empty;
         public string ImagePath { get; set; } = String.Empty;
         public DateTime LastActivity { get; set; } = DateTime.Now;
-        public IdentityRoleEnum IndentityRole { get;set; }
+        public IdentityRoleEnum IndentityRole { get; set; }
 
     }
 }

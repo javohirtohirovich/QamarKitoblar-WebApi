@@ -1,13 +1,8 @@
 ﻿using QamarKitoblar.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Domain.Entities.Orders
 {
-    public sealed class Order:Auditable
+    public sealed class Order : Auditable
     {
         public long UserId { get; set; }
         public OrderStatus Status { get; set; }

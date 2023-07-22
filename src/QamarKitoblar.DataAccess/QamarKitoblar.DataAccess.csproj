@@ -21,9 +21,4 @@
     <ProjectReference Include="..\QamarKitoblar.Domain\QamarKitoblar.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\Books\" />
-    <Folder Include="Repositories\Users\" />
-  </ItemGroup>
-
 </Project>
