@@ -9,11 +9,13 @@ using QamarKitoblar.Service.Interafaces.Common;
 using QamarKitoblar.Service.Interafaces.Geners;
 using QamarKitoblar.Service.Interafaces.Notifcations;
 using QamarKitoblar.Service.Interafaces.Publishers;
+using QamarKitoblar.Service.Interafaces.Users;
 using QamarKitoblar.Service.Services.Auth;
 using QamarKitoblar.Service.Services.Common;
 using QamarKitoblar.Service.Services.Geners;
 using QamarKitoblar.Service.Services.Notifcations;
 using QamarKitoblar.Service.Services.Publishers;
+using QamarKitoblar.Service.Services.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +35,9 @@ builder.Services.AddScoped<IPublisherRepository,PublisherRepository>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ISmsSender,SmsSender>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddSingleton<ISmsSender,SmsSender>();
 
 // ->
 

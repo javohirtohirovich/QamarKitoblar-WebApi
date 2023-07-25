@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using QamarKitoblar.DataAccess.Interfaces.Users;
+using QamarKitoblar.Domain.Entities.Users;
+using QamarKitoblar.Domain.Exceptions.Auth;
 using QamarKitoblar.Domain.Exceptions.Users;
 using QamarKitoblar.Service.Common.Helpers;
+using QamarKitoblar.Service.Common.Security;
 using QamarKitoblar.Service.Dtos.Auth;
 using QamarKitoblar.Service.Dtos.Notifcations;
 using QamarKitoblar.Service.Dtos.Security;
@@ -21,8 +25,10 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly ISmsSender _smsSender;
     private const int CACHED_MINUTES_FOR_REGISTER = 60;
-    private const int CACHED_MINUTES_FOR_VERIFICATION = 5;
+    private const int CACHED_MINUTES_FOR_VERIFICATION = 60;
     private const string REGISTER_CACHE_KEY = "register_";
+    private const string VERIFY_REGISTER_CACHE_KEY = "verify_register_";
+    private const int VERIFICATION_MAXIMUM_ATTEMPTS = 100;
 
 
     public AuthService(IMemoryCache memoryCache,IUserRepository userRepository, ISmsSender smsSender)
@@ -39,12 +45,12 @@ public class AuthService : IAuthService
         if (user is not null) throw new UserAlreadyExistsExcaption(dto.PhoneNumber);
 
         // delete if exists user by this phone number
-        if (_memoryCache.TryGetValue(dto.PhoneNumber, out RegisterDto cachedRegisterDto))
+        if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY+dto.PhoneNumber, out RegisterDto cachedRegisterDto))
         {
             cachedRegisterDto.FirstName = cachedRegisterDto.FirstName;
             _memoryCache.Remove(dto.PhoneNumber);
         }
-        else _memoryCache.Set(dto.PhoneNumber, dto,
+        else _memoryCache.Set(REGISTER_CACHE_KEY + dto.PhoneNumber, dto,
             TimeSpan.FromMinutes(CACHED_MINUTES_FOR_REGISTER));
 
         return (Result: true, CachedMinutes: CACHED_MINUTES_FOR_REGISTER);
@@ -52,7 +58,7 @@ public class AuthService : IAuthService
 
     public async Task<(bool Result, int CachedVerificationMinutes)> SendCodeForRegisterAsync(string phone)
     {
-        if (_memoryCache.TryGetValue(phone, out RegisterDto registerDto))
+        if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY + phone, out RegisterDto registerDto))
         {
             VerificationDto verificationDto = new VerificationDto();
             verificationDto.Attempt = 0;
@@ -61,19 +67,70 @@ public class AuthService : IAuthService
             // make confirm code as random
             verificationDto.Code = 11111;
 
-            _memoryCache.Set(phone, verificationDto, 
+            if (_memoryCache.TryGetValue(VERIFY_REGISTER_CACHE_KEY + phone, out VerificationDto oldVerifcationDto))
+            {
+                _memoryCache.Remove(VERIFY_REGISTER_CACHE_KEY + phone);
+            }
+
+            _memoryCache.Set(VERIFY_REGISTER_CACHE_KEY + phone, verificationDto,
                 TimeSpan.FromMinutes(CACHED_MINUTES_FOR_VERIFICATION));
 
-            //sms sender::begin
-            //sms sender::end
+            SmsMessage smsMessage = new SmsMessage();
+            smsMessage.Title = "Qamar Kitoblar";
+            smsMessage.Content = "Your verification code : " + verificationDto.Code;
+            smsMessage.Recipent = phone.Substring(1);
 
-            return (Result: true, CachedVerificationMinutes: CACHED_MINUTES_FOR_VERIFICATION);
+            var smsResult = await _smsSender.SendAsync(smsMessage);
+            if (smsResult is true) return (Result: true, CachedVerificationMinutes: CACHED_MINUTES_FOR_VERIFICATION);
+            else return (Result: false, CachedVerificationMinutes: 0);
         }
         else throw new UserCacheDataExpiredException();
     }
 
     public async Task<(bool Result, string Token)> VerifyRegisterAsync(string phone, int code)
     {
-        throw new NotImplementedException();
+        if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY + phone, out RegisterDto registerDto))
+        {
+            if (_memoryCache.TryGetValue(VERIFY_REGISTER_CACHE_KEY + phone, out VerificationDto verificationDto))
+            {
+                if (verificationDto.Attempt >= VERIFICATION_MAXIMUM_ATTEMPTS)
+                    throw new VerificationTooManyRequestsException();
+                else if (verificationDto.Code == code)
+                {
+                    var dbResult = await RegisterToDatabaseAsync(registerDto);
+                    return (Result: dbResult, Token: "");
+                }
+                else
+                {
+                    _memoryCache.Remove(VERIFY_REGISTER_CACHE_KEY + phone);
+                    verificationDto.Attempt++;
+                    _memoryCache.Set(VERIFY_REGISTER_CACHE_KEY + phone, verificationDto,
+                        TimeSpan.FromMinutes(CACHED_MINUTES_FOR_VERIFICATION));
+                    return (Result: false, Token: "");
+                }
+            }
+            else throw new VerificationCodeExpiredException();
+        }
+        else throw new UserCacheDataExpiredException();
+    }
+
+    private async Task<bool> RegisterToDatabaseAsync(RegisterDto registerDto)
+    {
+        var user = new User();
+        user.FirstName = registerDto.FirstName;
+        user.LastName = registerDto.LastName;
+        user.PhoneNumber = registerDto.PhoneNumber;
+        user.PhoneNumberConfirmed = true;
+
+        var hasherResult = PasswordHasher.Hash(registerDto.Password);
+        user.PasswordHash = hasherResult.Hash;
+        user.Salt = hasherResult.Salt;
+
+        user.CreatedAt = user.UpdatedAt = user.LastActivity = TimeHelper.GetDateTime();
+   
+        user.IndentityRole = Domain.Enums.IdentityRole.User;
+
+        var dbResult = await _userRepository.CreateAsync(user);
+        return dbResult > 0;
     }
 }

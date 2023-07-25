@@ -4,6 +4,6 @@ namespace QamarKitoblar.DataAccess.Common.Interfaces
 {
     public interface ISearchable<TViewModel>
     {
-        public Task<(int ItemsCount, IList<TViewModel>)> SearchAsync(string search, PaginationParams @params);
+        public Task<(long ItemsCount, IList<TViewModel>)> SearchAsync(string search, PaginationParams @params);
     }
 }

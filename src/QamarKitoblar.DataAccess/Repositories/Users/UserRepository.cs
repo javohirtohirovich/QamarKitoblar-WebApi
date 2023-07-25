@@ -1,6 +1,8 @@
 ﻿using Dapper;
+using QamarKitoblar.DataAccess.Common.Interfaces;
 using QamarKitoblar.DataAccess.Interfaces.Users;
 using QamarKitoblar.DataAccess.Utils;
+using QamarKitoblar.DataAccess.ViewModels.UsersVM;
 using QamarKitoblar.Domain.Entities.Users;
 
 namespace QamarKitoblar.DataAccess.Repositories.Users
@@ -32,11 +34,11 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             {
                 await _connection.OpenAsync();
                 string query = "INSERT INTO public.users(first_name, last_name, phone_number, phone_number_confirmed, passport_seria_number, " +
-                    "is_male, birth_date, country, region, postal_number, password_hash, salt, image_path, last_activity, identity_role, " +
+                    "is_male, birth_date, country, region, postal_number, password_hash, salt, image_path, last_activity, identity_role                           , " +
                     "created_at, updated_at) " +
-                    "VALUES (@FirstName, @LastName, @PhoneNumber, @PhoneNumberConfirmed, @PassportSeriaNumber, @IsMale, @BirthDate, " +
+                    $"VALUES (@FirstName, @LastName, @PhoneNumber, @PhoneNumberConfirmed, @PassportSeriaNumber, @IsMale, '{entity.BirthDate.Year}-{entity.BirthDate.Month}-{entity.BirthDate.Day}', " +
                     "@Country, @Region, @PostalNumber, @PasswordHash, @Salt, @ImagePath, @LastActivity, " +
-                    "@IdentityRole, @CreatedAt, @UpdatedAt);";
+                    "@IndentityRole, @CreatedAt, @UpdatedAt);";
                 var result = await _connection.ExecuteAsync(query, entity);
                 return result;
             }
@@ -69,22 +71,19 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             }
         }
 
-        public async Task<IList<User>> GetAllAsync(PaginationParams @params)
+        public async Task<IList<UserViewModel>> GetAllAsync(PaginationParams @params)
         {
             try
             {
                 await _connection.OpenAsync();
-                string query = "SELECT id, first_name, last_name, phone_number, phone_number_confirmed, " +
-                    "passport_seria_number, is_male, birth_date, country, region, postal_number, password_hash, " +
-                    "salt, image_path, last_activity, identity_role, created_at, updated_at " +
-                    "FROM public.users Order By id Desc " +
+                string query = "SELECT * FROM public.users Order By id Desc " +
                     $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
-                var result=(await _connection.QueryAsync<User>(query)).ToList();
+                var result=(await _connection.QueryAsync<UserViewModel>(query)).ToList();
                 return result;
             }
             catch
             {
-                return new List<User>();
+                return new List<UserViewModel>();
             }
             finally
             {
@@ -130,9 +129,25 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             }
         }
 
-        public Task<(int ItemsCount, IList<User>)> SearchAsync(string search, PaginationParams @params)
+        public async Task<(long ItemsCount, IList<UserViewModel>)> SearchAsync(string search, PaginationParams @params)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _connection.OpenAsync();
+                string query = $"Select * From users Where first_name ilike '{search}%' Order By first_name " +
+                    $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
+                var result = (await _connection.QueryAsync<UserViewModel>(query)).ToList();
+                long count= result.LongCount();
+                return (count, result);
+            }
+            catch
+            {
+                return (0,new List<UserViewModel>());
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
         }
 
         public async Task<int> UpdateAsync(long id, User entity)
@@ -157,5 +172,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
                 await _connection.CloseAsync();
             }
         }
+
+        
     }
 }
