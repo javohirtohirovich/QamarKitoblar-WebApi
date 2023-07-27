@@ -24,18 +24,20 @@ public class AuthService : IAuthService
     private readonly IMemoryCache _memoryCache;
     private readonly IUserRepository _userRepository;
     private readonly ISmsSender _smsSender;
+    private readonly ITokenService _tokenService;
     private const int CACHED_MINUTES_FOR_REGISTER = 60;
-    private const int CACHED_MINUTES_FOR_VERIFICATION = 60;
+    private const int CACHED_MINUTES_FOR_VERIFICATION = 5;
     private const string REGISTER_CACHE_KEY = "register_";
     private const string VERIFY_REGISTER_CACHE_KEY = "verify_register_";
-    private const int VERIFICATION_MAXIMUM_ATTEMPTS = 100;
+    private const int VERIFICATION_MAXIMUM_ATTEMPTS = 5;
 
 
-    public AuthService(IMemoryCache memoryCache,IUserRepository userRepository, ISmsSender smsSender)
+    public AuthService(IMemoryCache memoryCache,IUserRepository userRepository, ISmsSender smsSender,ITokenService tokenService)
     {
         this._memoryCache = memoryCache;
         this._userRepository = userRepository;
         this._smsSender = smsSender;
+        this._tokenService=tokenService;
 
     }
 #pragma warning disable
@@ -48,7 +50,7 @@ public class AuthService : IAuthService
         if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY+dto.PhoneNumber, out RegisterDto cachedRegisterDto))
         {
             cachedRegisterDto.FirstName = cachedRegisterDto.FirstName;
-            _memoryCache.Remove(dto.PhoneNumber);
+            _memoryCache.Remove(REGISTER_CACHE_KEY+dto.PhoneNumber);
         }
         else _memoryCache.Set(REGISTER_CACHE_KEY + dto.PhoneNumber, dto,
             TimeSpan.FromMinutes(CACHED_MINUTES_FOR_REGISTER));
@@ -65,7 +67,7 @@ public class AuthService : IAuthService
             verificationDto.CreatedAt = TimeHelper.GetDateTime();
 
             // make confirm code as random
-            verificationDto.Code = 11111;
+            verificationDto.Code = CodeGenerator.GenerateRandomNumber();
 
             if (_memoryCache.TryGetValue(VERIFY_REGISTER_CACHE_KEY + phone, out VerificationDto oldVerifcationDto))
             {
@@ -98,7 +100,13 @@ public class AuthService : IAuthService
                 else if (verificationDto.Code == code)
                 {
                     var dbResult = await RegisterToDatabaseAsync(registerDto);
-                    return (Result: dbResult, Token: "");
+                    if (dbResult is true)
+                    {
+                        var user = await _userRepository.GetByPhoneAsync(phone);
+                        string token = _tokenService.GenerateToken(user);
+                        return (Result: true, Token: token);
+                    }
+                    else return (Result: false, Token: "");
                 }
                 else
                 {
@@ -128,9 +136,21 @@ public class AuthService : IAuthService
 
         user.CreatedAt = user.UpdatedAt = user.LastActivity = TimeHelper.GetDateTime();
    
-        user.IndentityRole = Domain.Enums.IdentityRole.User;
+        user.IdentityRole = Domain.Enums.IdentityRole.User;
 
         var dbResult = await _userRepository.CreateAsync(user);
         return dbResult > 0;
+    }
+
+    public async Task<(bool Result, string Token)> LoginAsync(LoginDto loginDto)
+    {
+        var user = await _userRepository.GetByPhoneAsync(loginDto.PhoneNumber);
+        if (user is null) throw new UserNotFoundException();
+
+        var hasherResult = PasswordHasher.Verify(loginDto.Password, user.PasswordHash, user.Salt);
+        if (hasherResult == false) throw new PasswordNotMatchException();
+
+        string token = _tokenService.GenerateToken(user);
+        return (Result: true, Token: token);
     }
 }

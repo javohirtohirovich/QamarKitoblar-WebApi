@@ -18,13 +18,15 @@ namespace QamarKitoblar.Service.Services.Publishers;
 
 public class PublisherService : IPublisherService
 {
-    private IPublisherRepository _repository;
-    private IFileService _fileservice;
+    private readonly IPublisherRepository _repository;
+    private readonly IFileService _fileservice;
+    private readonly IPaginator  _paginator;
 
-    public PublisherService(IPublisherRepository publisherRepository, IFileService fileService) 
+    public PublisherService(IPublisherRepository publisherRepository, IFileService fileService, IPaginator paginator) 
     {
         this._repository = publisherRepository;
         this._fileservice=fileService;
+        this._paginator = paginator;
     }
     public async Task<long> CountAsync()
     {
@@ -65,6 +67,8 @@ public class PublisherService : IPublisherService
     public async Task<IList<Publisher>> GetAllAsync(PaginationParams @params)
     {
         var result = await _repository.GetAllAsync(@params);
+        var count = await _repository.CountAsync();
+        _paginator.Paginate(count, @params);
         return result;
     }
 

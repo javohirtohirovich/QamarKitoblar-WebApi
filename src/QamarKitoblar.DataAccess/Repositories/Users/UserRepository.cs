@@ -38,7 +38,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
                     "created_at, updated_at) " +
                     $"VALUES (@FirstName, @LastName, @PhoneNumber, @PhoneNumberConfirmed, @PassportSeriaNumber, @IsMale, '{entity.BirthDate.Year}-{entity.BirthDate.Month}-{entity.BirthDate.Day}', " +
                     "@Country, @Region, @PostalNumber, @PasswordHash, @Salt, @ImagePath, @LastActivity, " +
-                    "@IndentityRole, @CreatedAt, @UpdatedAt);";
+                    "@IdentityRole, @CreatedAt, @UpdatedAt);";
                 var result = await _connection.ExecuteAsync(query, entity);
                 return result;
             }
@@ -91,13 +91,32 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             }
         }
 
-        public async Task<User?> GetByIdAsync(long id)
+        public async Task<UserViewModel?> GetByIdAsync(long id)
         {
             try
             {
                 await _connection.OpenAsync();
                 string query = "Select * From users where id=@Id";
-                var result=await _connection.QuerySingleAsync<User>(query, new {Id=id});
+                var result=await _connection.QuerySingleAsync<UserViewModel>(query, new {Id=id});
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+        }
+
+        public async Task<User?> GetByIdCheckUser(long id)
+        {
+            try
+            {
+                await _connection.OpenAsync();
+                string query = "Select * From users where id=@Id";
+                var result = await _connection.QuerySingleAsync<User>(query, new { Id = id });
                 return result;
             }
             catch
@@ -134,9 +153,9 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             try
             {
                 await _connection.OpenAsync();
-                string query = $"Select * From users Where first_name ilike '{search}%' Order By first_name " +
+                string query = $"Select * From users Where first_name ilike @search Order By first_name " +
                     $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
-                var result = (await _connection.QueryAsync<UserViewModel>(query)).ToList();
+                var result = (await _connection.QueryAsync<UserViewModel>(query, new {search = "%" + search + "%"})).ToList();
                 long count= result.LongCount();
                 return (count, result);
             }
@@ -157,7 +176,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
                 await _connection.OpenAsync();
                 string query = "UPDATE public.users SET first_name=@FirstName, last_name=@LastName, phone_number=@PhoneNumber, " +
                     "phone_number_confirmed=@PhoneNumberConfirmed, passport_seria_number=@PassportSeriaNumber, is_male=@IsMale, " +
-                    "birth_date=@BirthDate, country=@Country, region=@Region, postal_number=@PostalNumber, password_hash=@PasswordHash, " +
+                    $"birth_date='{entity.BirthDate.Year}-{entity.BirthDate.Month}-{entity.BirthDate.Day}', country=@Country, region=@Region, postal_number=@PostalNumber, password_hash=@PasswordHash, " +
                     "salt=@Salt, image_path=@ImagePath, last_activity=@LastActivity, identity_role=@IdentityRole, created_at=@CreatedAt, " +
                     $"updated_at=@UpdatedAt WHERE id={id};";
                 var result = await _connection.ExecuteAsync(query, entity);

@@ -4,7 +4,8 @@ using QamarKitoblar.Domain.Entities.Users;
 
 namespace QamarKitoblar.DataAccess.Interfaces.Users;
 
-public interface IUserRepository : IRepository<User, User>, IGetAll<UserViewModel>, ISearchable<UserViewModel>
+public interface IUserRepository : IRepository<User, UserViewModel>, IGetAll<UserViewModel>, ISearchable<UserViewModel>
 {
     public Task<User?> GetByPhoneAsync(string phone);
+    public Task<User?> GetByIdCheckUser(long id);
 }

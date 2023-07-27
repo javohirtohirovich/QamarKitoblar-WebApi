@@ -1,38 +1,129 @@
-﻿using QamarKitoblar.DataAccess.Interfaces.Discounts;
+﻿using Dapper;
+using QamarKitoblar.DataAccess.Interfaces.Discounts;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Discounts;
+using QamarKitoblar.Domain.Entities.Geners;
 
 namespace QamarKitoblar.DataAccess.Repositories.Discounts;
 
 public class DiscountRepository : BaseRepository, IDiscountRepository
 {
-    public Task<long> CountAsync()
+    public async Task<long> CountAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "Select Count(*) From discounts";
+            var result = await _connection.QuerySingleAsync<long>(query);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<int> CreateAsync(Discount entity)
+    public async Task<int> CreateAsync(Discount entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO public.discounts(name, description, created_at, updated_at) " +
+                "VALUES (@Name, @Description, @CreatedAt, @UpdatedAt);";
+            var result = await _connection.ExecuteAsync(query, entity);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<int> DeleteAsync(long id)
+    public async Task<int> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "DELETE FROM public.discounts WHERE id=@Id;";
+            var result = await _connection.ExecuteAsync(query, new { Id = id });
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<IList<Discount>> GetAllAsync(PaginationParams @params)
+    public async Task<IList<Discount>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "SELECT * FROM public.discounts Order By id Desc " +
+                $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
+            var result = (await _connection.QueryAsync<Discount>(query)).ToList();
+            return result;
+
+        }
+        catch
+        {
+            return new List<Discount>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<Discount> GetByIdAsync(long id)
+    public async Task<Discount?> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "Select * From discounts Where id=@Id";
+            var result = await _connection.QuerySingleAsync<Discount>(query, new { Id = id });
+            return result;
+
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<int> UpdateAsync(long id, Discount entity)
+    public async Task<int> UpdateAsync(long id, Discount entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "UPDATE public.discounts SET name=@Name, description=@Description, created_at=@CreatedAt, updated_at=@UpdatedAt " +
+                $"WHERE id={id};";
+            var result = await _connection.ExecuteAsync(query, entity);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }

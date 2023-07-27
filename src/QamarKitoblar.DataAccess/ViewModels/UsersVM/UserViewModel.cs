@@ -17,12 +17,12 @@ namespace QamarKitoblar.DataAccess.ViewModels.UsersVM
         public bool PhoneNumberConfirmed { get; set; } = false;
         public string PassportSeriaNumber { get; set; } = String.Empty;
         public bool IsMale { get; set; }
-        public DateOnly BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Country { get; set; } = String.Empty;
         public string Region { get; set; } = String.Empty;
         public string PostalNumber { get; set; } = String.Empty;       
         public string ImagePath { get; set; } = String.Empty;
         public DateTime LastActivity { get; set; } = DateTime.Now;
-        public IdentityRole IndentityRole { get; set; }
+        public IdentityRole IdentityRole { get; set; }
     }
 }

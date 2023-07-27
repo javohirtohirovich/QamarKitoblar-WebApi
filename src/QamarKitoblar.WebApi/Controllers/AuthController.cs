@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QamarKitoblar.Service.Dtos.Auth;
 using QamarKitoblar.Service.Interafaces.Auth;
@@ -17,6 +18,7 @@ namespace QamarKitoblar.WebApi.Controllers
             this._authService = authService;
         }
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync([FromForm] RegisterDto registerDto)
         {
             var validator = new RegisterValidator();
@@ -29,6 +31,7 @@ namespace QamarKitoblar.WebApi.Controllers
             else return BadRequest(result.Errors);
         }
         [HttpPost("register/send-code")]
+        [AllowAnonymous]
         public async Task<IActionResult> SendCodeRegisterAsync(string phone)
         {
             var result = PhoneNumberValidator.IsValid(phone);
@@ -38,9 +41,22 @@ namespace QamarKitoblar.WebApi.Controllers
             return Ok(new { serviceResult.Result, serviceResult.CachedVerificationMinutes });
         }
         [HttpPost("register/verify")]
+        [AllowAnonymous]
         public async Task<IActionResult> VerifyRegisterAsync([FromBody] VerifyRegisterDto verifyRegisterDto)
         {
             var serviceResult = await _authService.VerifyRegisterAsync(verifyRegisterDto.PhoneNumber, verifyRegisterDto.Code);
+            return Ok(new { serviceResult.Result, serviceResult.Token });
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
+        {
+            var validator = new LoginValidator();
+            var valResult = validator.Validate(loginDto);
+            if (valResult.IsValid == false) return BadRequest(valResult.Errors);
+
+            var serviceResult = await _authService.LoginAsync(loginDto);
             return Ok(new { serviceResult.Result, serviceResult.Token });
         }
     }

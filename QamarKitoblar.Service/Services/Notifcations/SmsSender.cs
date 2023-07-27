@@ -14,7 +14,7 @@ namespace QamarKitoblar.Service.Services.Notifcations;
 public class SmsSender : ISmsSender
 {
     private readonly string BASE_URL = "";
-    private readonly string API_KEY = "";
+    //private readonly string API_KEY = "";
     private readonly string SENDER = "";
     private readonly string EMAIL = "";
     private readonly string PASSWORD = "";

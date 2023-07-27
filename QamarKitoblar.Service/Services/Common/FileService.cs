@@ -17,9 +17,21 @@ public class FileService : IFileService
     {
         ROOTPATH = env.WebRootPath;
     }
-    public Task<bool> DeleteAvatarAsync(string subpath)
+    public async Task<bool> DeleteAvatarAsync(string subpath)
     {
-        throw new NotImplementedException();
+        string path = Path.Combine(ROOTPATH, subpath);
+        if (File.Exists(path))
+        {
+            await Task.Run(() =>
+            {
+                File.Delete(path);
+            });
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public async Task<bool> DeleteImageAsync(string subpath)
@@ -39,9 +51,16 @@ public class FileService : IFileService
         }
     }
 
-    public Task<string> UploadAvatarAsync(IFormFile avatar)
+    public async Task<string> UploadAvatarAsync(IFormFile avatar)
     {
-        throw new NotImplementedException();
+        string newAvatarName = MediaHelper.MakeImageName(avatar.FileName);
+        string subpath = Path.Combine(MEDIA, AVATAR, newAvatarName);
+        string path = Path.Combine(ROOTPATH, subpath);
+
+        var stream = new FileStream(path, FileMode.Create);
+        await avatar.CopyToAsync(stream);
+        stream.Close();
+        return subpath;
     }
 
     public async Task<string> UploadImageAsync(IFormFile image)
