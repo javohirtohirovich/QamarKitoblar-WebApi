@@ -12,6 +12,5 @@ namespace QamarKitoblar.Service.Interafaces.Geners
         public Task<bool> UpdateAsync(long GenerId, GenerUpdateDto dto);
         public Task<Gener> GetByIdAsync(long GenerId);
         public Task<IList<Gener>> GetAllAsync(PaginationParams @params);
-
     }
 }

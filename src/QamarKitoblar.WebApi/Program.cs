@@ -27,6 +27,7 @@ using QamarKitoblar.Service.Services.Notifcations;
 using QamarKitoblar.Service.Services.Publishers;
 using QamarKitoblar.Service.Services.Users;
 using QamarKitoblar.WebApi.Configurations;
+using System.Security.Principal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +49,7 @@ builder.Services.AddScoped<IDiscountRepository,DiscountRepository>();
 builder.Services.AddScoped<IBookCommentRepository,BookCommentRepository>();
 
 
-
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IGenerService, GenerService>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
@@ -60,7 +61,10 @@ builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IBookCommentService,BookCommentService>();
 builder.Services.AddScoped<IPaginator, Paginator>();
 
+
+
 builder.Services.AddSingleton<ISmsSender,SmsSender>();
+
 
 builder.ConfigureJwtAuth();
 builder.ConfigureSwaggerAuth();

@@ -6,6 +6,7 @@ using QamarKitoblar.Domain.Exceptions.Books;
 using QamarKitoblar.Domain.Exceptions.Geners;
 using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.BookComments;
+using QamarKitoblar.Service.Interafaces.Auth;
 using QamarKitoblar.Service.Interafaces.BookComments;
 using QamarKitoblar.Service.Interafaces.Common;
 using System;
@@ -20,11 +21,13 @@ public class BookCommentService : IBookCommentService
 {
     private readonly IBookCommentRepository _repository;
     private readonly IPaginator _paginator;
+    private readonly IIdentityService _identity;
 
-    public BookCommentService(IBookCommentRepository commentRepository,IPaginator paginator)
+    public BookCommentService(IBookCommentRepository commentRepository,IPaginator paginator,IIdentityService identity)
     {
         this._repository = commentRepository;
         this._paginator = paginator;
+        this._identity = identity;
     }
     public Task<long> CountAsync(long bookId)
     {
@@ -36,7 +39,7 @@ public class BookCommentService : IBookCommentService
         BookComent bookComent = new BookComent()
         {
             BookId = dto.BookId,
-            UserId = dto.UserId,
+            UserId = _identity.UserId,
             Comment = dto.Comment,
             CreatedAt = TimeHelper.GetDateTime(),
             UpdatedAt = TimeHelper.GetDateTime(),

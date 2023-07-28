@@ -4,6 +4,9 @@ using QamarKitoblar.Service.Interafaces.Books;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Service.Dtos.Books;
 using Microsoft.AspNetCore.Authorization;
+using QamarKitoblar.Service.Validators.Geners;
+using QamarKitoblar.Service.Validators.Books;
+using FluentValidation;
 
 namespace QamarKitoblar.WebApi.Controllers
 {
@@ -55,7 +58,12 @@ namespace QamarKitoblar.WebApi.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAsync([FromForm] BookCreateDto dto)
-            =>Ok(await _service.CreateAsync(dto));
+        {
+            var bookValidator = new BookCreateValidator();
+            var result = bookValidator.Validate(dto);
+            if (result.IsValid) return Ok(await _service.CreateAsync(dto));
+            else return BadRequest(result.Errors);
+        }
 
         //For Delete
 
@@ -67,7 +75,12 @@ namespace QamarKitoblar.WebApi.Controllers
         [HttpPut]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync(long id, [FromForm] BookUpdateDto dto)
-            => Ok(await _service.UpdateAsync(id, dto));
+        {
+            var updateValidator = new BookUpdateValidator();
+            var validationResult = updateValidator.Validate(dto);
+            if (validationResult.IsValid) return Ok(await _service.UpdateAsync(id, dto));
+            else return BadRequest(validationResult.Errors);
+        }
 
     }
 }
