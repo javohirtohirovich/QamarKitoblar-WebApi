@@ -31,9 +31,9 @@ namespace QamarKitoblar.WebApi.Controllers
             => Ok(await _service.DeleteAsync(commentId));
 
         //For GetAll
-        [HttpGet("getall/{bookId}")]
+        [HttpGet("getall")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllAsync(long bookId,[FromQuery] int page = 1)
+        public async Task<IActionResult> GetAllAsync([FromQuery] long bookId,[FromQuery] int page = 1)
             => Ok(await _service.GetAllAsync(bookId,new PaginationParams(page, MaxPageSize)));
 
         

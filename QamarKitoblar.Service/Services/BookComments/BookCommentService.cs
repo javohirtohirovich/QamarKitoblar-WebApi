@@ -61,7 +61,7 @@ public class BookCommentService : IBookCommentService
     public async Task<IList<BookComent>> GetAllAsync(long bookId, PaginationParams @params)
     {
         var result=await _repository.GetAllAsync(bookId, @params);
-        var count = await _repository.CountAsync();
+        var count = await _repository.CountAsync(bookId);
         _paginator.Paginate(count, @params);
         return result;
     }
