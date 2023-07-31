@@ -1,9 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace QamarKitoblar.DataAccess.ViewModels.BooksVM;
+﻿namespace QamarKitoblar.DataAccess.ViewModels.BooksVM;
 
 public class BookViewModel
-{ 
+{
     public long Id { get; set; }
     public string Name { get; set; } = String.Empty;
     public string Author { get; set; } = String.Empty;

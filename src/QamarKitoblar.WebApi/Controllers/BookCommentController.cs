@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Service.Dtos.BookComments;
-using QamarKitoblar.Service.Dtos.Categories;
 using QamarKitoblar.Service.Interafaces.BookComments;
 
 namespace QamarKitoblar.WebApi.Controllers
@@ -33,10 +31,10 @@ namespace QamarKitoblar.WebApi.Controllers
         //For GetAll
         [HttpGet("getall")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllAsync([FromQuery] long bookId,[FromQuery] int page = 1)
-            => Ok(await _service.GetAllAsync(bookId,new PaginationParams(page, MaxPageSize)));
+        public async Task<IActionResult> GetAllAsync([FromQuery] long bookId, [FromQuery] int page = 1)
+            => Ok(await _service.GetAllAsync(bookId, new PaginationParams(page, MaxPageSize)));
 
-        
+
 
     }
 }

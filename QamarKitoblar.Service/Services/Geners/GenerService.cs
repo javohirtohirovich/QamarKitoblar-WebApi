@@ -1,5 +1,4 @@
-﻿using QamarKitoblar.DataAccess.Interfaces;
-using QamarKitoblar.DataAccess.Interfaces.Geners;
+﻿using QamarKitoblar.DataAccess.Interfaces.Geners;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Geners;
 using QamarKitoblar.Domain.Exceptions.Geners;
@@ -15,7 +14,7 @@ public class GenerService : IGenerService
     private readonly IGenerRepository _generRepository;
     private readonly IPaginator _paginator;
 
-    public GenerService(IGenerRepository generRepository,IPaginator paginator)
+    public GenerService(IGenerRepository generRepository, IPaginator paginator)
     {
         this._generRepository = generRepository;
         this._paginator = paginator;
@@ -42,8 +41,8 @@ public class GenerService : IGenerService
 
     public async Task<bool> DeleteAsync(long GenerId)
     {
-        var resultDel=await _generRepository.GetByIdAsync(GenerId);
-        if(resultDel is null) { throw new GenerNotFoundException(); }
+        var resultDel = await _generRepository.GetByIdAsync(GenerId);
+        if (resultDel is null) { throw new GenerNotFoundException(); }
         var result = await _generRepository.DeleteAsync(GenerId);
         return result > 0;
     }

@@ -75,7 +75,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Orders
                 await _connection.OpenAsync();
                 string query = "SELECT * FROM public.orders Order By id Desc " +
                     $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
-                var result=(await _connection.QueryAsync<Order>(query)).ToList();
+                var result = (await _connection.QueryAsync<Order>(query)).ToList();
                 return result;
 
             }
@@ -95,7 +95,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Orders
             {
                 await _connection.OpenAsync();
                 string query = "Select * From Where id=@Id";
-                var result = await _connection.QuerySingleAsync<Order>(query, new {Id=id});
+                var result = await _connection.QuerySingleAsync<Order>(query, new { Id = id });
                 return result;
             }
             catch
@@ -110,7 +110,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Orders
 
         public async Task<int> UpdateAsync(long id, Order entity)
         {
-            try 
+            try
             {
                 await _connection.CloseAsync();
                 string query = "UPDATE public.orders SET " +
@@ -123,7 +123,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Orders
             }
             catch
             {
-                return 0; 
+                return 0;
             }
             finally
             {

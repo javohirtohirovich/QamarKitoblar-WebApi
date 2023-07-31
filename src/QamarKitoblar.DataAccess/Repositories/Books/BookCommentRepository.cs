@@ -2,13 +2,6 @@
 using QamarKitoblar.DataAccess.Interfaces.Books;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Books;
-using QamarKitoblar.Domain.Entities.Geners;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.DataAccess.Repositories.Books;
 
@@ -20,7 +13,7 @@ public class BookCommentRepository : BaseRepository, IBookCommentRepository
         {
             await _connection.OpenAsync();
             string query = "Select Count(*) From book_comments Where book_id=@Id";
-            var result = await _connection.QuerySingleAsync<long>(query, new {Id=bookId});
+            var result = await _connection.QuerySingleAsync<long>(query, new { Id = bookId });
             return result;
         }
         catch
@@ -77,14 +70,14 @@ public class BookCommentRepository : BaseRepository, IBookCommentRepository
         }
     }
 
-    public async Task<IList<BookComent>> GetAllAsync(long bookId,PaginationParams @params)
+    public async Task<IList<BookComent>> GetAllAsync(long bookId, PaginationParams @params)
     {
         try
         {
             await _connection.OpenAsync();
             string query = "SELECT * FROM public.book_comments Where book_id=@Id Order By id Desc " +
                 $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
-            var result = (await _connection.QueryAsync<BookComent>(query, new {Id=bookId})).ToList();
+            var result = (await _connection.QueryAsync<BookComent>(query, new { Id = bookId })).ToList();
             return result;
 
         }

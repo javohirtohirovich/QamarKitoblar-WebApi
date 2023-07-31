@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using QamarKitoblar.Domain.Enums;
 using QamarKitoblar.Service.Interafaces.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Auth;
 

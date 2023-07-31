@@ -1,13 +1,6 @@
 ﻿using QamarKitoblar.DataAccess.Utils;
-using QamarKitoblar.Domain.Entities.Geners;
 using QamarKitoblar.Domain.Entities.Publishers;
-using QamarKitoblar.Service.Dtos.Categories;
 using QamarKitoblar.Service.Dtos.Publishers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Interafaces.Publishers
 {

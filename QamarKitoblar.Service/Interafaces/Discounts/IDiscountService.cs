@@ -1,13 +1,6 @@
 ﻿using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Discounts;
-using QamarKitoblar.Domain.Entities.Geners;
-using QamarKitoblar.Service.Dtos.Categories;
 using QamarKitoblar.Service.Dtos.Discounts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Interafaces.Discounts;
 

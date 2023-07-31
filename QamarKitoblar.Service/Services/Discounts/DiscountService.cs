@@ -1,18 +1,11 @@
 ﻿using QamarKitoblar.DataAccess.Interfaces.Discounts;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Discounts;
-using QamarKitoblar.Domain.Entities.Geners;
 using QamarKitoblar.Domain.Exceptions.Discounts;
-using QamarKitoblar.Domain.Exceptions.Geners;
 using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.Discounts;
 using QamarKitoblar.Service.Interafaces.Common;
 using QamarKitoblar.Service.Interafaces.Discounts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Discounts;
 
@@ -21,7 +14,7 @@ public class DiscountService : IDiscountService
     private readonly IDiscountRepository _repository;
     private readonly IPaginator _paginator;
 
-    public DiscountService(IDiscountRepository discountRepository, IPaginator paginator) 
+    public DiscountService(IDiscountRepository discountRepository, IPaginator paginator)
     {
         this._repository = discountRepository;
         this._paginator = paginator;
@@ -48,7 +41,7 @@ public class DiscountService : IDiscountService
     public async Task<bool> DeleteAsync(long DiscountId)
     {
         var delResult = await _repository.GetByIdAsync(DiscountId);
-        if(delResult is null) { throw new DiscountNotFoundException(); }
+        if (delResult is null) { throw new DiscountNotFoundException(); }
         var result = await _repository.DeleteAsync(DiscountId);
         return result > 0;
     }

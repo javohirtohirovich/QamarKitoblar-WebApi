@@ -1,15 +1,10 @@
 ﻿using FluentValidation;
 using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.Books;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Validators.Books;
 
-public class BookUpdateValidator:AbstractValidator<BookUpdateDto>
+public class BookUpdateValidator : AbstractValidator<BookUpdateDto>
 {
     public BookUpdateValidator()
     {

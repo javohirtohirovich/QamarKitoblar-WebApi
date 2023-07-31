@@ -13,15 +13,15 @@ namespace QamarKitoblar.WebApi.Controllers;
 public class GenersController : ControllerBase
 {
     private readonly IGenerService _service;
-    private readonly int MaxPageSize=30;
+    private readonly int MaxPageSize = 30;
     public GenersController(IGenerService generService)
     {
         this._service = generService;
     }
     //For Create
-    
+
     [HttpPost]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateAsync([FromForm] GenerCreateDto dto)
     {
         var generValidator = new GenerCreateValidator();
@@ -31,9 +31,9 @@ public class GenersController : ControllerBase
     }
 
     //For Delete
-    
+
     [HttpDelete("{generId}")]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteAsync(long generId)
     {
         var result = await _service.DeleteAsync(generId);
@@ -42,7 +42,7 @@ public class GenersController : ControllerBase
     }
 
     //For Count
-    
+
     [HttpGet("count")]
     [AllowAnonymous]
     public async Task<IActionResult> CountAsync()
@@ -58,20 +58,20 @@ public class GenersController : ControllerBase
         var validationResult = updateValidator.Validate(dto);
         if (validationResult.IsValid) return Ok(await _service.UpdateAsync(id, dto));
         else return BadRequest(validationResult.Errors);
-    }   
-    
+    }
+
     //For GetById
-    
+
     [HttpGet("{generId}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetByIdAsync(long generId)
         => Ok(await _service.GetByIdAsync(generId));
 
-    
+
     //For GetAll
 
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
-        => Ok(await _service.GetAllAsync(new PaginationParams(page, MaxPageSize) ));
+        => Ok(await _service.GetAllAsync(new PaginationParams(page, MaxPageSize)));
 }

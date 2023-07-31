@@ -1,22 +1,12 @@
-﻿using Microsoft.AspNetCore.Server.IIS.Core;
-using QamarKitoblar.DataAccess.Interfaces.Users;
+﻿using QamarKitoblar.DataAccess.Interfaces.Users;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.DataAccess.ViewModels.UsersVM;
-using QamarKitoblar.Domain.Entities.Publishers;
-using QamarKitoblar.Domain.Entities.Users;
 using QamarKitoblar.Domain.Exceptions.File;
 using QamarKitoblar.Domain.Exceptions.Users;
 using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.Users;
 using QamarKitoblar.Service.Interafaces.Common;
 using QamarKitoblar.Service.Interafaces.Users;
-using QamarKitoblar.Service.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Users;
 
@@ -26,15 +16,15 @@ public class UserService : IUserService
     private readonly IFileService _fileService;
     private readonly IPaginator _paginator;
 
-    public UserService(IUserRepository userRepository,IFileService fileService, IPaginator paginator)
+    public UserService(IUserRepository userRepository, IFileService fileService, IPaginator paginator)
     {
-        this._repository=userRepository;
-        this._fileService=fileService;
+        this._repository = userRepository;
+        this._fileService = fileService;
         this._paginator = paginator;
     }
     public async Task<long> CountAsync()
     {
-        var result =await  _repository.CountAsync();
+        var result = await _repository.CountAsync();
         return result;
     }
 
@@ -49,7 +39,7 @@ public class UserService : IUserService
             if (Delresult is false) { throw new ImageNotFoundException(); }
         }
 
-        var dbResult=await _repository.DeleteAsync(PublisherId);
+        var dbResult = await _repository.DeleteAsync(PublisherId);
         return dbResult > 0;
     }
 
@@ -64,13 +54,13 @@ public class UserService : IUserService
     public async Task<UserViewModel> GetByIdAsync(long UserId)
     {
         var result = await _repository.GetByIdAsync(UserId);
-        if(result is null) { throw new UserNotFoundException(); }
-        else { return  result; }
+        if (result is null) { throw new UserNotFoundException(); }
+        else { return result; }
     }
 
     public async Task<(long ItemsCount, IList<UserViewModel>)> SearchAsync(string search, PaginationParams @params)
     {
-        var result=await _repository.SearchAsync(search,@params);
+        var result = await _repository.SearchAsync(search, @params);
         var count = await _repository.CountAsync();
         _paginator.Paginate(count, @params);
         return result;
@@ -79,9 +69,9 @@ public class UserService : IUserService
     public async Task<bool> UpdateAsync(long UserId, UserUpdateDto userUpdateDto)
     {
         var user = await _repository.GetByIdCheckUser(UserId);
-        if(user is null) { throw new UserNotFoundException(); }
+        if (user is null) { throw new UserNotFoundException(); }
 
-        if(userUpdateDto.ImagePath is not null)
+        if (userUpdateDto.ImagePath is not null)
         {
             //Delete old image
             if (user.ImagePath != "")
@@ -100,15 +90,15 @@ public class UserService : IUserService
         user.FirstName = userUpdateDto.FirstName;
         user.LastName = userUpdateDto.LastName;
         user.PhoneNumber = userUpdateDto.PhoneNumber;
-        user.Country= userUpdateDto.Country;
+        user.Country = userUpdateDto.Country;
         user.Region = userUpdateDto.Region;
         user.IsMale = userUpdateDto.IsMale;
         user.BirthDate = userUpdateDto.BirthDate;
         user.PostalNumber = userUpdateDto.PostalNumber;
-        user.PassportSeriaNumber= userUpdateDto.PassportSeriaNumber;
+        user.PassportSeriaNumber = userUpdateDto.PassportSeriaNumber;
         user.UpdatedAt = TimeHelper.GetDateTime();
 
-        var result = await _repository.UpdateAsync(UserId,user);
+        var result = await _repository.UpdateAsync(UserId, user);
         return result > 0;
     }
 }

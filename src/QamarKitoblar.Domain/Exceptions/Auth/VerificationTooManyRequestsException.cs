@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace QamarKitoblar.Domain.Exceptions.Auth;
 
-namespace QamarKitoblar.Domain.Exceptions.Auth;
-
-public class VerificationTooManyRequestsException:TooManyRequestException
+public class VerificationTooManyRequestsException : TooManyRequestException
 {
     public VerificationTooManyRequestsException()
     {

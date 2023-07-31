@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using QamarKitoblar.DataAccess.Interfaces.Users;
 using QamarKitoblar.Domain.Entities.Users;
 using QamarKitoblar.Domain.Exceptions.Auth;
@@ -11,11 +10,6 @@ using QamarKitoblar.Service.Dtos.Notifcations;
 using QamarKitoblar.Service.Dtos.Security;
 using QamarKitoblar.Service.Interafaces.Auth;
 using QamarKitoblar.Service.Interafaces.Notifcations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Auth;
 
@@ -32,12 +26,12 @@ public class AuthService : IAuthService
     private const int VERIFICATION_MAXIMUM_ATTEMPTS = 5;
 
 
-    public AuthService(IMemoryCache memoryCache,IUserRepository userRepository, ISmsSender smsSender,ITokenService tokenService)
+    public AuthService(IMemoryCache memoryCache, IUserRepository userRepository, ISmsSender smsSender, ITokenService tokenService)
     {
         this._memoryCache = memoryCache;
         this._userRepository = userRepository;
         this._smsSender = smsSender;
-        this._tokenService=tokenService;
+        this._tokenService = tokenService;
 
     }
 #pragma warning disable
@@ -47,10 +41,10 @@ public class AuthService : IAuthService
         if (user is not null) throw new UserAlreadyExistsExcaption(dto.PhoneNumber);
 
         // delete if exists user by this phone number
-        if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY+dto.PhoneNumber, out RegisterDto cachedRegisterDto))
+        if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY + dto.PhoneNumber, out RegisterDto cachedRegisterDto))
         {
             cachedRegisterDto.FirstName = cachedRegisterDto.FirstName;
-            _memoryCache.Remove(REGISTER_CACHE_KEY+dto.PhoneNumber);
+            _memoryCache.Remove(REGISTER_CACHE_KEY + dto.PhoneNumber);
         }
         else _memoryCache.Set(REGISTER_CACHE_KEY + dto.PhoneNumber, dto,
             TimeSpan.FromMinutes(CACHED_MINUTES_FOR_REGISTER));
@@ -135,7 +129,7 @@ public class AuthService : IAuthService
         user.Salt = hasherResult.Salt;
 
         user.CreatedAt = user.UpdatedAt = user.LastActivity = TimeHelper.GetDateTime();
-   
+
         user.IdentityRole = Domain.Enums.IdentityRole.User;
 
         var dbResult = await _userRepository.CreateAsync(user);

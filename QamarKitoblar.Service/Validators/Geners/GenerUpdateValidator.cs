@@ -1,16 +1,11 @@
 ﻿using FluentValidation;
 using QamarKitoblar.Service.Dtos.Categories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Validators.Geners;
 
-public class GenerUpdateValidator:AbstractValidator<GenerUpdateDto>
+public class GenerUpdateValidator : AbstractValidator<GenerUpdateDto>
 {
-    public GenerUpdateValidator() 
+    public GenerUpdateValidator()
     {
         RuleFor(dto => dto.Name).NotNull().NotEmpty().WithMessage("Name field is required!")
             .MinimumLength(3).WithMessage("Name must be more than 3 characters")

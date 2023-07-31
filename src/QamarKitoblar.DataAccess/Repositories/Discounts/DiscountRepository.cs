@@ -2,7 +2,6 @@
 using QamarKitoblar.DataAccess.Interfaces.Discounts;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Discounts;
-using QamarKitoblar.Domain.Entities.Geners;
 
 namespace QamarKitoblar.DataAccess.Repositories.Discounts;
 

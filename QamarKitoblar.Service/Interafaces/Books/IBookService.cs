@@ -1,15 +1,6 @@
 ﻿using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.DataAccess.ViewModels.BooksVM;
-using QamarKitoblar.DataAccess.ViewModels.UsersVM;
-using QamarKitoblar.Domain.Entities.Books;
-using QamarKitoblar.Domain.Entities.Geners;
 using QamarKitoblar.Service.Dtos.Books;
-using QamarKitoblar.Service.Dtos.Categories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Interafaces.Books;
 

@@ -113,7 +113,7 @@ public class PublisherRepository : BaseRepository, IPublisherRepository
                 "SET name=@Name, description=@Description, image_path=@ImagePath, phone_number=@PhoneNumber, " +
                 "created_at=@CreatedAt, updated_at=@UpdatedAt " +
                 $"WHERE id={id};";
-            var result = await _connection.ExecuteAsync(query,entity);
+            var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
         catch

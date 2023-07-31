@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QamarKitoblar.Service.Interafaces.Books;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Service.Dtos.Books;
-using Microsoft.AspNetCore.Authorization;
-using QamarKitoblar.Service.Validators.Geners;
+using QamarKitoblar.Service.Interafaces.Books;
 using QamarKitoblar.Service.Validators.Books;
-using FluentValidation;
 
 namespace QamarKitoblar.WebApi.Controllers
 {
@@ -16,9 +13,9 @@ namespace QamarKitoblar.WebApi.Controllers
     {
         private readonly IBookService _service;
         private readonly int MaxPageSize = 30;
-        public BookController(IBookService bookService) 
+        public BookController(IBookService bookService)
         {
-            this._service=bookService;
+            this._service = bookService;
         }
 
         //For GetAll
@@ -33,17 +30,17 @@ namespace QamarKitoblar.WebApi.Controllers
         [HttpGet("{bookId}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetById(long bookId)
-            =>Ok(await _service.GetByIdAsync(bookId));
+            => Ok(await _service.GetByIdAsync(bookId));
 
         //For Search
 
         [HttpGet("search/{search}")]
         [AllowAnonymous]
         public async Task<IActionResult> SearchAsync(string search, [FromQuery] int page = 1)
-        { 
-            var result =(await _service.SearchAsync(search, new PaginationParams(page, MaxPageSize)));
+        {
+            var result = (await _service.SearchAsync(search, new PaginationParams(page, MaxPageSize)));
             return Ok(result.Item2);
-        
+
         }
 
         //For Count
@@ -51,7 +48,7 @@ namespace QamarKitoblar.WebApi.Controllers
         [HttpGet("count")]
         [AllowAnonymous]
         public async Task<IActionResult> CountAsync()
-            =>Ok(await _service.CountAsync());
+            => Ok(await _service.CountAsync());
 
         //For Create
 
@@ -70,7 +67,7 @@ namespace QamarKitoblar.WebApi.Controllers
         [HttpDelete("{BookId}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync(long BookId)
-            =>Ok(await _service.DeleteAsync(BookId));
+            => Ok(await _service.DeleteAsync(BookId));
 
         [HttpPut]
         [Authorize(Roles = "Admin")]

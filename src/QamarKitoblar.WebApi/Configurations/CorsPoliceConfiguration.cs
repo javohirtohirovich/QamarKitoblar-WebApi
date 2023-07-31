@@ -11,11 +11,11 @@ public static class CorsPoliceConfiguration
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
 
-           /* option.AddPolicy("OnlySite", builder =>
-            {
-                builder.WithOrigins("https://www.qamarkitoblar.uz")
-                    .AllowAnyMethod().AllowAnyHeader();
-            });*/
+            /* option.AddPolicy("OnlySite", builder =>
+             {
+                 builder.WithOrigins("https://www.qamarkitoblar.uz")
+                     .AllowAnyMethod().AllowAnyHeader();
+             });*/
         });
     }
 }

@@ -36,12 +36,12 @@ public class FileService : IFileService
 
     public async Task<bool> DeleteImageAsync(string subpath)
     {
-        string path=Path.Combine(ROOTPATH, subpath);
-        if(File.Exists(path)) 
+        string path = Path.Combine(ROOTPATH, subpath);
+        if (File.Exists(path))
         {
-            await Task.Run(() => 
-            { 
-                File.Delete(path); 
+            await Task.Run(() =>
+            {
+                File.Delete(path);
             });
             return true;
         }
@@ -67,7 +67,7 @@ public class FileService : IFileService
     {
         string newImageName = MediaHelper.MakeImageName(image.FileName);
         string subpath = Path.Combine(MEDIA, IMAGE, newImageName);
-        string path=Path.Combine(ROOTPATH, subpath);
+        string path = Path.Combine(ROOTPATH, subpath);
 
         var stream = new FileStream(path, FileMode.Create);
         await image.CopyToAsync(stream);

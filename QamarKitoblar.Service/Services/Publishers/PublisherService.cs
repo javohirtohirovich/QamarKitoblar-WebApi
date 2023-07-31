@@ -1,5 +1,4 @@
-﻿using Npgsql.Internal.TypeHandlers.DateTimeHandlers;
-using QamarKitoblar.DataAccess.Interfaces.Publishers;
+﻿using QamarKitoblar.DataAccess.Interfaces.Publishers;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Publishers;
 using QamarKitoblar.Domain.Exceptions.File;
@@ -8,11 +7,6 @@ using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.Publishers;
 using QamarKitoblar.Service.Interafaces.Common;
 using QamarKitoblar.Service.Interafaces.Publishers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Publishers;
 
@@ -20,12 +14,12 @@ public class PublisherService : IPublisherService
 {
     private readonly IPublisherRepository _repository;
     private readonly IFileService _fileservice;
-    private readonly IPaginator  _paginator;
+    private readonly IPaginator _paginator;
 
-    public PublisherService(IPublisherRepository publisherRepository, IFileService fileService, IPaginator paginator) 
+    public PublisherService(IPublisherRepository publisherRepository, IFileService fileService, IPaginator paginator)
     {
         this._repository = publisherRepository;
-        this._fileservice=fileService;
+        this._fileservice = fileService;
         this._paginator = paginator;
     }
     public async Task<long> CountAsync()
@@ -36,15 +30,15 @@ public class PublisherService : IPublisherService
 
     public async Task<bool> CreateAsync(PublisherCreateDto dto)
     {
-        string imagepath =await _fileservice.UploadImageAsync(dto.ImagePath);
+        string imagepath = await _fileservice.UploadImageAsync(dto.ImagePath);
         Publisher publisher = new Publisher()
         {
             Name = dto.Name,
             Description = dto.Description,
             ImagePath = imagepath,
-            PhoneNumber=dto.PhoneNumber,
+            PhoneNumber = dto.PhoneNumber,
             CreatedAt = TimeHelper.GetDateTime(),
-            UpdatedAt=TimeHelper.GetDateTime()
+            UpdatedAt = TimeHelper.GetDateTime()
         };
         var result = await _repository.CreateAsync(publisher);
 
@@ -55,7 +49,7 @@ public class PublisherService : IPublisherService
     public async Task<bool> DeleteAsync(long PublisherId)
     {
         var publisher = await _repository.GetByIdAsync(PublisherId);
-        if(publisher == null) { throw new PublisherNotFoundException(); }
+        if (publisher == null) { throw new PublisherNotFoundException(); }
 
         var result = await _fileservice.DeleteImageAsync(publisher.ImagePath);
         if (result == false) { throw new ImageNotFoundException(); }
@@ -74,19 +68,19 @@ public class PublisherService : IPublisherService
 
     public async Task<Publisher> GetByIdAsync(long PublisherId)
     {
-        var result=await _repository.GetByIdAsync(PublisherId);
+        var result = await _repository.GetByIdAsync(PublisherId);
         if (result is null) { throw new PublisherNotFoundException(); }
         else { return result; }
     }
 
     public async Task<bool> UpdateAsync(long PublisherId, PublisherUpdateDto dto)
     {
-        var publisher=await _repository.GetByIdAsync(PublisherId);
-        if(publisher == null) { throw new PublisherNotFoundException(); }
+        var publisher = await _repository.GetByIdAsync(PublisherId);
+        if (publisher == null) { throw new PublisherNotFoundException(); }
 
-        publisher.Name= dto.Name;
-        publisher.Description= dto.Description;
-        if(dto.ImagePath is not null)
+        publisher.Name = dto.Name;
+        publisher.Description = dto.Description;
+        if (dto.ImagePath is not null)
         {
             //Delete old image
             var deleteResult = await _fileservice.DeleteImageAsync(publisher.ImagePath);
@@ -97,7 +91,7 @@ public class PublisherService : IPublisherService
             var newImagePath = await _fileservice.UploadImageAsync(dto.ImagePath);
 
             //save new path in publisher
-            publisher.ImagePath= newImagePath;
+            publisher.ImagePath = newImagePath;
         }
 
         publisher.PhoneNumber = dto.PhoneNumber;
@@ -105,7 +99,7 @@ public class PublisherService : IPublisherService
         //update time in UpdatedAt column
         publisher.UpdatedAt = TimeHelper.GetDateTime();
 
-        var dvResult=await  _repository.UpdateAsync(PublisherId, publisher);
+        var dvResult = await _repository.UpdateAsync(PublisherId, publisher);
 
         return dvResult > 0;
     }

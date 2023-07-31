@@ -2,12 +2,7 @@
 using Newtonsoft.Json;
 using QamarKitoblar.Service.Dtos.Notifcations;
 using QamarKitoblar.Service.Interafaces.Notifcations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Notifcations;
 

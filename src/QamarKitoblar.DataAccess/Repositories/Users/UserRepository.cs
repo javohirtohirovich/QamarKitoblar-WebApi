@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using QamarKitoblar.DataAccess.Common.Interfaces;
 using QamarKitoblar.DataAccess.Interfaces.Users;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.DataAccess.ViewModels.UsersVM;
@@ -15,14 +14,14 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             {
                 await _connection.OpenAsync();
                 string query = "Select Count(*) From users";
-                var result=await _connection.QuerySingleAsync<long>(query); 
+                var result = await _connection.QuerySingleAsync<long>(query);
                 return result;
             }
-            catch 
+            catch
             {
                 return 0;
             }
-            finally 
+            finally
             {
                 await _connection.CloseAsync();
             }
@@ -58,7 +57,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             {
                 await _connection.OpenAsync();
                 string query = "DELETE FROM users WHERE id=@Id;";
-                var result=await _connection.ExecuteAsync(query, new { Id=id });
+                var result = await _connection.ExecuteAsync(query, new { Id = id });
                 return result;
             }
             catch
@@ -78,7 +77,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
                 await _connection.OpenAsync();
                 string query = "SELECT * FROM public.users Order By id Desc " +
                     $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
-                var result=(await _connection.QueryAsync<UserViewModel>(query)).ToList();
+                var result = (await _connection.QueryAsync<UserViewModel>(query)).ToList();
                 return result;
             }
             catch
@@ -87,7 +86,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             }
             finally
             {
-                await _connection.CloseAsync() ;
+                await _connection.CloseAsync();
             }
         }
 
@@ -97,7 +96,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             {
                 await _connection.OpenAsync();
                 string query = "Select * From users where id=@Id";
-                var result=await _connection.QuerySingleAsync<UserViewModel>(query, new {Id=id});
+                var result = await _connection.QuerySingleAsync<UserViewModel>(query, new { Id = id });
                 return result;
             }
             catch
@@ -135,7 +134,7 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             {
                 await _connection.OpenAsync();
                 string query = "Select * From users where phone_number like @PhoneNumber";
-                var result=await _connection.QuerySingleAsync<User>(query, new {PhoneNumber=phone});
+                var result = await _connection.QuerySingleAsync<User>(query, new { PhoneNumber = phone });
                 return result;
             }
             catch
@@ -155,13 +154,13 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
                 await _connection.OpenAsync();
                 string query = $"Select * From users Where first_name ilike @search Order By first_name " +
                     $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
-                var result = (await _connection.QueryAsync<UserViewModel>(query, new {search = "%" + search + "%"})).ToList();
-                long count= result.LongCount();
+                var result = (await _connection.QueryAsync<UserViewModel>(query, new { search = "%" + search + "%" })).ToList();
+                long count = result.LongCount();
                 return (count, result);
             }
             catch
             {
-                return (0,new List<UserViewModel>());
+                return (0, new List<UserViewModel>());
             }
             finally
             {
@@ -192,6 +191,6 @@ namespace QamarKitoblar.DataAccess.Repositories.Users
             }
         }
 
-        
+
     }
 }

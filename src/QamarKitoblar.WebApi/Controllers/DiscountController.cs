@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Exceptions.Discounts;
-using QamarKitoblar.Domain.Exceptions.Geners;
-using QamarKitoblar.Service.Dtos.Categories;
 using QamarKitoblar.Service.Dtos.Discounts;
 using QamarKitoblar.Service.Interafaces.Discounts;
-using System.Data;
 
 namespace QamarKitoblar.WebApi.Controllers
 {
@@ -18,7 +14,7 @@ namespace QamarKitoblar.WebApi.Controllers
         private readonly IDiscountService _service;
         private readonly int MaxPageSize = 30;
 
-        public DiscountController(IDiscountService discountService) 
+        public DiscountController(IDiscountService discountService)
         {
             this._service = discountService;
         }
@@ -50,7 +46,7 @@ namespace QamarKitoblar.WebApi.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync(long id, [FromForm] DiscountUpdateDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
-        
+
         //For GetById
         [HttpGet("{discountId}")]
         [AllowAnonymous]

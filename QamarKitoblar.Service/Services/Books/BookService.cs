@@ -2,19 +2,12 @@
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.DataAccess.ViewModels.BooksVM;
 using QamarKitoblar.Domain.Entities.Books;
-using QamarKitoblar.Domain.Entities.Publishers;
 using QamarKitoblar.Domain.Exceptions.Books;
 using QamarKitoblar.Domain.Exceptions.File;
 using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.Books;
 using QamarKitoblar.Service.Interafaces.Books;
 using QamarKitoblar.Service.Interafaces.Common;
-using QamarKitoblar.Service.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Books;
 
@@ -24,7 +17,7 @@ public class BookService : IBookService
     private readonly IFileService _fileService;
     private readonly IPaginator _paginator;
 
-    public BookService(IBookRepository bookRepository, IFileService fileService, IPaginator paginator) 
+    public BookService(IBookRepository bookRepository, IFileService fileService, IPaginator paginator)
     {
         this._repository = bookRepository;
         this._fileService = fileService;
@@ -32,7 +25,7 @@ public class BookService : IBookService
     }
     public async Task<long> CountAsync()
     {
-        var result=await _repository.CountAsync();
+        var result = await _repository.CountAsync();
         return result;
     }
 
@@ -48,10 +41,10 @@ public class BookService : IBookService
             IsHaveElectron = dto.IsHaveElectron,
             GenerId = dto.GenerId,
             PublisherId = dto.PublisherId,
-            Description =dto.Description,
+            Description = dto.Description,
             CreatedAt = TimeHelper.GetDateTime(),
-            UpdatedAt=TimeHelper.GetDateTime()
-            
+            UpdatedAt = TimeHelper.GetDateTime()
+
         };
         var result = await _repository.CreateAsync(book);
 
@@ -60,7 +53,7 @@ public class BookService : IBookService
 
     public async Task<bool> DeleteAsync(long BookId)
     {
-        var resultGet=await _repository.GetByIdAsync(BookId);
+        var resultGet = await _repository.GetByIdAsync(BookId);
         if (resultGet is null) { throw new BookNotFoundException(); }
 
         var result = await _fileService.DeleteImageAsync(resultGet.ImagePath);
@@ -80,8 +73,8 @@ public class BookService : IBookService
 
     public async Task<BookViewModel> GetByIdAsync(long BookId)
     {
-        var result=await _repository.GetByIdAsync(BookId);
-        if(result is null) { throw new BookNotFoundException(); }
+        var result = await _repository.GetByIdAsync(BookId);
+        if (result is null) { throw new BookNotFoundException(); }
         else { return result; }
     }
 
@@ -95,8 +88,8 @@ public class BookService : IBookService
 
     public async Task<bool> UpdateAsync(long BookId, BookUpdateDto dto)
     {
-        var book=await _repository.GetByIdCheckBook(BookId);
-        if(book is null) { throw new BookNotFoundException(); }
+        var book = await _repository.GetByIdCheckBook(BookId);
+        if (book is null) { throw new BookNotFoundException(); }
 
         if (dto.ImagePath is not null)
         {
@@ -113,11 +106,11 @@ public class BookService : IBookService
         }
 
         book.Name = dto.Name;
-        book.Author= dto.Author;
+        book.Author = dto.Author;
         book.IsHaveElectron = dto.IsHaveElectron;
-        book.UnitPrice=dto.UnitPrice;
-        book.GenerId= dto.GenerId;
-        book.PublisherId=dto.PublisherId;
+        book.UnitPrice = dto.UnitPrice;
+        book.GenerId = dto.GenerId;
+        book.PublisherId = dto.PublisherId;
 
         //update time in UpdatedAt column
         book.UpdatedAt = TimeHelper.GetDateTime();

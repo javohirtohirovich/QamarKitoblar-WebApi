@@ -1,11 +1,5 @@
 ﻿using FluentValidation;
-using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.Categories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Validators.Geners;
 

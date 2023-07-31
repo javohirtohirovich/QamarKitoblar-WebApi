@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace QamarKitoblar.Domain.Exceptions.Users;
 
-namespace QamarKitoblar.Domain.Exceptions.Users;
-
-public class UserAlreadyExistsExcaption:AlreadyExistsExcaption
+public class UserAlreadyExistsExcaption : AlreadyExistsExcaption
 {
     public UserAlreadyExistsExcaption()
     {

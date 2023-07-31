@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Service.Dtos.Publishers;
 using QamarKitoblar.Service.Interafaces.Publishers;
 using QamarKitoblar.Service.Validators.Publishers;
-using System.ComponentModel.Design;
-using System.Data;
-using System.Runtime.InteropServices;
 
 
 namespace QamarKitoblar.WebApi.Controllers;
@@ -21,7 +17,7 @@ public class PublisherController : ControllerBase
 
     public PublisherController(IPublisherService publisherService)
     {
-         this._service=publisherService;
+        this._service = publisherService;
     }
 
     //For Create
@@ -38,7 +34,7 @@ public class PublisherController : ControllerBase
     //For Update
     [HttpPut]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateAsync(long publisherId,[FromForm] PublisherUpdateDto dto)
+    public async Task<IActionResult> UpdateAsync(long publisherId, [FromForm] PublisherUpdateDto dto)
     {
         var validator = new PublisherUpdateValidator();
         var validationResult = validator.Validate(dto);

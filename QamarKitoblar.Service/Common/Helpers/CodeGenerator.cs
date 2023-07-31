@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QamarKitoblar.Service.Common.Helpers;
+﻿namespace QamarKitoblar.Service.Common.Helpers;
 
 public class CodeGenerator
 {

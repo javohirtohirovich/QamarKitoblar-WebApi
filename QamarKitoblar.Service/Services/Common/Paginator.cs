@@ -2,11 +2,6 @@
 using Newtonsoft.Json;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Service.Interafaces.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.Common;
 

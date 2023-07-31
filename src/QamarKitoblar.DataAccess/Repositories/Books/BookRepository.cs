@@ -2,9 +2,7 @@
 using QamarKitoblar.DataAccess.Interfaces.Books;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.DataAccess.ViewModels.BooksVM;
-using QamarKitoblar.DataAccess.ViewModels.UsersVM;
 using QamarKitoblar.Domain.Entities.Books;
-using QamarKitoblar.Domain.Entities.Users;
 
 namespace QamarKitoblar.DataAccess.Repositories.Books;
 
@@ -16,7 +14,7 @@ public class BookRepository : BaseRepository, IBookRepository
         {
             await _connection.OpenAsync();
             string query = "Select Count(*) From books";
-            var result=await _connection.QuerySingleAsync<long>(query);
+            var result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch

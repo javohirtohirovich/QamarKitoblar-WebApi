@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using QamarKitoblar.Service.Dtos.Notifcations;
 using QamarKitoblar.Service.Interafaces.Notifcations;
 

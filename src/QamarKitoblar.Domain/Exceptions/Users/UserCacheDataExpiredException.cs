@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace QamarKitoblar.Domain.Exceptions.Users;
 
-namespace QamarKitoblar.Domain.Exceptions.Users;
-
-public class UserCacheDataExpiredException:ExpiredException
+public class UserCacheDataExpiredException : ExpiredException
 {
-    public UserCacheDataExpiredException() 
+    public UserCacheDataExpiredException()
     {
-        TitleMessage= "User data has expired!";
+        TitleMessage = "User data has expired!";
     }
 }

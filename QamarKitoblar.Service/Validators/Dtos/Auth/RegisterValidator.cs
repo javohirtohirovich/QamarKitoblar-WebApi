@@ -1,10 +1,5 @@
 ﻿using FluentValidation;
 using QamarKitoblar.Service.Dtos.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Validators.Dtos.Auth
 {

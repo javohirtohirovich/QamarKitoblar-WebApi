@@ -27,26 +27,27 @@ using QamarKitoblar.Service.Services.Notifcations;
 using QamarKitoblar.Service.Services.Publishers;
 using QamarKitoblar.Service.Services.Users;
 using QamarKitoblar.WebApi.Configurations;
-using System.Security.Principal;
+using QamarKitoblar.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
+builder.ConfigureJwtAuth();
+builder.ConfigureSwaggerAuth();
 builder.ConfigureCORSPolicy();
 // ->
 builder.Services.AddScoped<IGenerRepository, GenerRepository>();
-builder.Services.AddScoped<IPublisherRepository,PublisherRepository>();
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IBookRepository,BookRepository>();
-builder.Services.AddScoped<IDiscountRepository,DiscountRepository>();
-builder.Services.AddScoped<IBookCommentRepository,BookCommentRepository>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+builder.Services.AddScoped<IBookCommentRepository, BookCommentRepository>();
 
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
@@ -58,23 +59,20 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
-builder.Services.AddScoped<IBookCommentService,BookCommentService>();
+builder.Services.AddScoped<IBookCommentService, BookCommentService>();
 builder.Services.AddScoped<IPaginator, Paginator>();
 
 
 
-builder.Services.AddSingleton<ISmsSender,SmsSender>();
+builder.Services.AddSingleton<ISmsSender, SmsSender>();
 
-
-builder.ConfigureJwtAuth();
-builder.ConfigureSwaggerAuth();
 
 // ->
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -82,11 +80,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
-
+app.UseStaticFiles();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

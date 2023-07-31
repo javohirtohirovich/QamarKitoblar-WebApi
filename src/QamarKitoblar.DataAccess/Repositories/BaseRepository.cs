@@ -11,6 +11,6 @@ public class BaseRepository
     {
         SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-        this._connection = new NpgsqlConnection("Host=localhost; Port=5432; Database=QamarKitoblar-db; User Id=postgres; Password=3007;");
+        this._connection = new NpgsqlConnection("Host=localhost; Port=5432; Database=QamarKitoblar-db; User Id=postgres; Password=ll;");
     }
 }

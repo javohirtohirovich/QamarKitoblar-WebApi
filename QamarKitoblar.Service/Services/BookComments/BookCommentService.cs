@@ -1,19 +1,12 @@
 ﻿using QamarKitoblar.DataAccess.Interfaces.Books;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.Domain.Entities.Books;
-using QamarKitoblar.Domain.Entities.Geners;
 using QamarKitoblar.Domain.Exceptions.Books;
-using QamarKitoblar.Domain.Exceptions.Geners;
 using QamarKitoblar.Service.Common.Helpers;
 using QamarKitoblar.Service.Dtos.BookComments;
 using QamarKitoblar.Service.Interafaces.Auth;
 using QamarKitoblar.Service.Interafaces.BookComments;
 using QamarKitoblar.Service.Interafaces.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QamarKitoblar.Service.Services.BookComments;
 
@@ -23,7 +16,7 @@ public class BookCommentService : IBookCommentService
     private readonly IPaginator _paginator;
     private readonly IIdentityService _identity;
 
-    public BookCommentService(IBookCommentRepository commentRepository,IPaginator paginator,IIdentityService identity)
+    public BookCommentService(IBookCommentRepository commentRepository, IPaginator paginator, IIdentityService identity)
     {
         this._repository = commentRepository;
         this._paginator = paginator;
@@ -60,7 +53,7 @@ public class BookCommentService : IBookCommentService
 
     public async Task<IList<BookComent>> GetAllAsync(long bookId, PaginationParams @params)
     {
-        var result=await _repository.GetAllAsync(bookId, @params);
+        var result = await _repository.GetAllAsync(bookId, @params);
         var count = await _repository.CountAsync(bookId);
         _paginator.Paginate(count, @params);
         return result;
