@@ -1,5 +1,7 @@
 # QamarKitoblar-WebApi
 qamarkitoblar is a special sales platform for qamarkitoblar bookstore for online book sales
+<h1>Database Design</h1>
+<img src="https://github.com/javohirtohirovich/QamarKitoblar-WebApi/assets/124333197/81afb0b3-df48-4048-80ca-130012c8a230">
 <h1>API</h1>
 <h3>1</h3>
 <img src="https://github.com/javohirtohirovich/QamarKitoblar-WebApi/assets/124333197/06228491-fca9-41fe-83c7-69d89c9f199e">
