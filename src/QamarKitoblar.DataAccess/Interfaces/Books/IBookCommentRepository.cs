@@ -8,4 +8,5 @@ public interface IBookCommentRepository : IRepository<BookComent, BookComent>, I
 {
     public Task<IList<BookComent>> GetAllAsync(long bookId, PaginationParams @params);
     public Task<long> CountAsync(long bookId);
+    public Task<IList<BookComent>> GetAllUserIdAsync(long bookId,long userId,PaginationParams @params);
 }

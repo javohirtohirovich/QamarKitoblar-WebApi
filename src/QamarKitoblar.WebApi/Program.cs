@@ -62,7 +62,7 @@ builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IBookCommentService, BookCommentService>();
 builder.Services.AddScoped<IPaginator, Paginator>();
 
-
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddSingleton<ISmsSender, SmsSender>();
 

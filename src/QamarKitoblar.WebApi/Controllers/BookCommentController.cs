@@ -34,7 +34,17 @@ namespace QamarKitoblar.WebApi.Controllers
         public async Task<IActionResult> GetAllAsync([FromQuery] long bookId, [FromQuery] int page = 1)
             => Ok(await _service.GetAllAsync(bookId, new PaginationParams(page, MaxPageSize)));
 
+        //For Count
+        [HttpGet("count")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CountAsync(long bookId)
+            =>Ok(await _service.CountAsync(bookId));
 
+        // For GetAll Comment for UserId
+        [HttpGet("my_comments")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllUserId([FromQuery] long bookId, [FromQuery] int page=1)
+            =>Ok(await _service.GetAllUserIdAsync(bookId, new PaginationParams(page,MaxPageSize)));
 
     }
 }

@@ -96,6 +96,27 @@ public class BookCommentRepository : BaseRepository, IBookCommentRepository
     {
         throw new NotImplementedException();
     }
+
+    public async Task<IList<BookComent>> GetAllUserIdAsync(long bookId,long userId, PaginationParams @params)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM public.book_comments Where book_id={bookId} AND user_id={userId} Order By id Desc " +
+                $"Offset {@params.GetSkipCount()} Limit {@params.PageSize}";
+            var result=(await _connection.QueryAsync<BookComent>(query)).ToList();
+            return result;
+        }
+        catch
+        {
+            return new List<BookComent>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
+    }
+
     //--------------------------------------------------------------------------------------
 
     public async Task<BookComent?> GetByIdAsync(long id)

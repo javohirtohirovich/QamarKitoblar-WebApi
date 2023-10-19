@@ -53,7 +53,7 @@ namespace QamarKitoblar.WebApi.Controllers
         //For Create
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateAsync([FromForm] BookCreateDto dto)
         {
             var bookValidator = new BookCreateValidator();

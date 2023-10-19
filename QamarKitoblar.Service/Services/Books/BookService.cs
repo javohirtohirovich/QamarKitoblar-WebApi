@@ -1,4 +1,5 @@
-﻿using QamarKitoblar.DataAccess.Interfaces.Books;
+﻿using AutoMapper;
+using QamarKitoblar.DataAccess.Interfaces.Books;
 using QamarKitoblar.DataAccess.Utils;
 using QamarKitoblar.DataAccess.ViewModels.BooksVM;
 using QamarKitoblar.Domain.Entities.Books;
@@ -16,12 +17,14 @@ public class BookService : IBookService
     private readonly IBookRepository _repository;
     private readonly IFileService _fileService;
     private readonly IPaginator _paginator;
+    private readonly IMapper _mapper;
 
-    public BookService(IBookRepository bookRepository, IFileService fileService, IPaginator paginator)
+    public BookService(IBookRepository bookRepository, IFileService fileService, IPaginator paginator, IMapper mapper)
     {
         this._repository = bookRepository;
         this._fileService = fileService;
         this._paginator = paginator;
+        this._mapper = mapper;
     }
     public async Task<long> CountAsync()
     {
@@ -32,20 +35,13 @@ public class BookService : IBookService
     public async Task<bool> CreateAsync(BookCreateDto dto)
     {
         string imagepath = await _fileService.UploadImageAsync(dto.ImagePath);
-        Book book = new Book()
-        {
-            Name = dto.Name,
-            Author = dto.Author,
-            ImagePath = imagepath,
-            UnitPrice = dto.UnitPrice,
-            IsHaveElectron = dto.IsHaveElectron,
-            GenerId = dto.GenerId,
-            PublisherId = dto.PublisherId,
-            Description = dto.Description,
-            CreatedAt = TimeHelper.GetDateTime(),
-            UpdatedAt = TimeHelper.GetDateTime()
+        Book book = _mapper.Map<Book>(dto);
 
-        };
+        book.CreatedAt = TimeHelper.GetDateTime();
+        book.UpdatedAt = TimeHelper.GetDateTime();
+
+
+
         var result = await _repository.CreateAsync(book);
 
         return result > 0;

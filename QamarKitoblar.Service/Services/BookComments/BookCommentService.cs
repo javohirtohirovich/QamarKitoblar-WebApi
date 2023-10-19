@@ -22,9 +22,10 @@ public class BookCommentService : IBookCommentService
         this._paginator = paginator;
         this._identity = identity;
     }
-    public Task<long> CountAsync(long bookId)
+    public async Task<long> CountAsync(long bookId)
     {
-        throw new NotImplementedException();
+        var result=await _repository.CountAsync(bookId);
+        return result;
     }
 
     public async Task<bool> CreateAsync(BookCommentCreateDto dto)
@@ -56,6 +57,13 @@ public class BookCommentService : IBookCommentService
         var result = await _repository.GetAllAsync(bookId, @params);
         var count = await _repository.CountAsync(bookId);
         _paginator.Paginate(count, @params);
+        return result;
+    }
+
+    public async Task<IList<BookComent>> GetAllUserIdAsync(long bookId, PaginationParams @params)
+    {
+        var result=await _repository.GetAllUserIdAsync(bookId,_identity.UserId,@params);
+
         return result;
     }
 

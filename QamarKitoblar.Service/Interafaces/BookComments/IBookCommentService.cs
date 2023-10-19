@@ -12,4 +12,5 @@ public interface IBookCommentService
     public Task<bool> UpdateAsync(long CommentId, BookCommentUpdateDto dto);
     public Task<BookComent> GetByIdAsync(long CommentId);
     public Task<IList<BookComent>> GetAllAsync(long bookId, PaginationParams @params);
+    public Task<IList<BookComent>>GetAllUserIdAsync(long bookId,PaginationParams @params);
 }
